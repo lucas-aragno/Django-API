@@ -1,4 +1,4 @@
-
+  
 import uuid
 import simplejson as json
 
@@ -49,7 +49,7 @@ def session_id_required(f):
 # SESSIONS
 @session_id_required
 def logout(request):
-  session_id = request.POST['session_id']
+  session_id = request.POST.get('session_id',False)
   try:
     session = Session.objects.all().filter(session_id = session_id).get()
   except Session.DoesNotExist:
@@ -61,8 +61,8 @@ def logout(request):
     return HttpResponse(json.dumps(json_response('error')))
 
 def login(request):
-  fb_uid = request.POST['fb_uid']
-  fb_name = request.POST['fb_name']
+  fb_uid = request.POST.get('fb_uid',False)
+  fb_name = request.POST.get('fb_name',False)
   try:
     user = User.objects.all().filter(fb_uid = fb_uid).get()
   except User.DoesNotExist:

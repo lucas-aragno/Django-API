@@ -196,22 +196,18 @@ def remove_user_from_list(request):
 # Passes
 
 @session_id_required
-def get_ticket_by_user_id_and_bar_id(resuqest):
+def get_ticket_by_user_id_and_bar_id(request):
   owner = User.objects.all().filter(id = request.GET.get('user_id',False))
   bar = Bar.objects.all().filter(id = request.GET.get('bar_id',False))
-  tickets = Tickets.objects.all().filter(owner = owner)
-  bar_tickets
+  tickets = Ticket.objects.all().filter(owner = owner)
+  bar_tickets = []
+
   for ticket in tickets:
-    if(ticket.item.bar == Bar.objects.get(bar = bar)
+    if(ticket.item.bar.id == bar.get().id):
+      bar_tickets.append(ticket)
+
   response = []
   for bar_ticket in bar_tickets:
-    if (bar_ticket.ticket_type == request.GET.get('ticket_type',False)):
+    if (bar_ticket.ticket_type() == request.GET.get('ticket_type',False)):
       response.append(ticket.to_json())
   return HttpResponse(json.dumps(response))
-
-
-def index(request):
-
-	users = User.objects.all()
-        #response = serializers.serialize('json', users)
-	return JsonResponse(model_to_dict(users))

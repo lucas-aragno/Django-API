@@ -3,7 +3,6 @@ from django.conf.urls import patterns, url
 from API import views
 
 urlpatterns = patterns('',
-    url(r'^$', views.index, name='index'),
     url(r'login$', views.login, name='login'),
     url(r'logout$', views.logout, name='logout'),
     url(r'user$', views.get_user_by_id, name='get_user_by_id'),

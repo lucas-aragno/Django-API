@@ -12,5 +12,6 @@ urlpatterns = patterns('',
     url(r'user/lists$', views.get_user_lists, name='get_user_lists'),
     url(r'user/list/add$', views.add_user_to_list, name='add_user_to_list'),
     url(r'user/list/remove$', views.remove_user_from_list, name='remove_user_from_list'),
+    url(r'user/tickets$', views.get_ticket_by_user_id_and_bar_id, name='get_ticket_by_user_id_and_bar_id'),
 
 )

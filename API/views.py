@@ -199,10 +199,13 @@ def remove_user_from_list(request):
 def get_ticket_by_user_id_and_bar_id(resuqest):
   owner = User.objects.all().filter(id = request.GET.get('user_id',False))
   bar = Bar.objects.all().filter(id = request.GET.get('bar_id',False))
-  tickets = Tickets.objects.all().filter(owner = owner, bar = bar)
-  response = []
+  tickets = Tickets.objects.all().filter(owner = owner)
+  bar_tickets
   for ticket in tickets:
-    if (ticket.pass_type == request.GET.get('ticket_type',False)):
+    if(ticket.item.bar == Bar.objects.get(bar = bar)
+  response = []
+  for bar_ticket in bar_tickets:
+    if (bar_ticket.ticket_type == request.GET.get('ticket_type',False)):
       response.append(ticket.to_json())
   return HttpResponse(json.dumps(response))
 

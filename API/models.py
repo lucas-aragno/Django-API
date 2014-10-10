@@ -7,32 +7,6 @@ class Session(models.Model):
 	def __str__(self):
 		return self.session_id
 
-class Pass(models.Model):
-  used_at = models.DateTimeField(null=True)
-  owner = models.ForeignKey('User')
-  bar = models.ForeignKey('Bar', null=True)
-  name = models.CharField(max_length=100)
-  pass_type = models.CharField(max_length=100)
-  flyer = models.ImageField(upload_to='passes',null=True)
-
-  def use(self):
-    self.used_at = datetime.now()
-    self.save()
-
-  def is_drink(self):
-    return True if (self.pass_type == "drink") else False
-
-  def is_pass(self):
-    return True if (self.pass_type == "pass") else False
-
-  def __str__(self):
-    return self.name
-
-  def is_used(self):
-    return True if (self.used_at) else False
-
-  def to_json(self):
-    return {'flyer' : self.flyer.url, 'name' : self.name, 'used_at' : self.used_at }
 
 class Bar(models.Model):
     name = models.CharField(max_length = 100)
@@ -45,7 +19,6 @@ class List(models.Model):
 
 	def to_json(self):
 		json = []
-                #join = UserList.objects.filter(collection = self)
 		for user in self.user_set.all():
 			json.append(user.to_json())
 		return {'id' : self.id, 'list_name' : self.name, 'list' : json}
@@ -90,3 +63,51 @@ class User(models.Model):
 class UserList(models.Model):
 	user = models.ForeignKey(User)
 	collection = models.ForeignKey(List)
+
+class Item(models.Model):
+  bar = models.ForeignKey(Bar)
+  item_type = models.CharField(max_length=100)
+  flyer = models.ImageField(upload_to='items',null=True)
+  stock = models.IntegerField(default = 0)
+  name = models.CharField(max_length=100)
+  description = models.CharField(max_length=400, null=True)
+
+  def is_drink(self):
+    return True if (self.item_type == "drink") else False
+
+  def is_pass(self):
+    return True if (self.item_type == "pass") else False
+
+  def is_promo(self):
+    return True if (self.item_type == "promo") else False
+
+  def reduce_stock(self, amount):
+  	self.stock = self.stock - amount
+  	self.save()
+
+  def increase_amount(self, amount):
+  	self.stock = self.stock + amount
+  	self.save()
+
+  
+class Ticket(models.Model):
+  used_at = models.DateTimeField(null=True)
+  owner = models.ForeignKey('User')
+  item = models.ForeignKey('Item', null=True)
+  
+  
+
+  def use(self):
+    self.used_at = datetime.now()
+    self.save()
+
+  def ticket_type(self):
+    return str(self.item.item_type)
+
+  def is_used(self):
+    return True if (self.used_at) else False
+
+  def to_json(self):
+    return {'flyer' : self.item.flyer.url, 'name' : str(self.item.name), 'used_at' : self.used_at }
+
+

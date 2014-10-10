@@ -13,6 +13,8 @@ class Bar(models.Model):
 
     def to_json(self):
       return {'name': self.name}
+    def __str__(self):
+      return self.name
 
 class List(models.Model):
 	name = models.CharField(max_length=200)
@@ -72,6 +74,9 @@ class Item(models.Model):
   name = models.CharField(max_length=100)
   description = models.CharField(max_length=400, null=True)
 
+  def __str__(self):
+    return self.name
+
   def is_drink(self):
     return True if (self.item_type == "drink") else False
 
@@ -88,15 +93,15 @@ class Item(models.Model):
   def increase_amount(self, amount):
   	self.stock = self.stock + amount
   	self.save()
-
   
 class Ticket(models.Model):
   used_at = models.DateTimeField(null=True, blank=True)
   owner = models.ForeignKey('User')
   item = models.ForeignKey('Item', null=True)
   
+  def __str__(self):
+    return self.item.name
   
-
   def use(self):
     self.used_at = datetime.now()
     self.save()

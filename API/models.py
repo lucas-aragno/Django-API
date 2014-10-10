@@ -67,7 +67,7 @@ class UserList(models.Model):
 class Item(models.Model):
   bar = models.ForeignKey(Bar)
   item_type = models.CharField(max_length=100)
-  flyer = models.ImageField(upload_to='items',null=True)
+  flyer = models.CharField(max_length=100,null=True)
   stock = models.IntegerField(default = 0)
   name = models.CharField(max_length=100)
   description = models.CharField(max_length=400, null=True)
@@ -108,6 +108,6 @@ class Ticket(models.Model):
     return True if (self.used_at) else False
 
   def to_json(self):
-    return {'flyer' : self.item.flyer.url, 'name' : str(self.item.name), 'used_at' : self.used_at }
+    return {'flyer' : str(self.item.flyer), 'name' : str(self.item.name), 'used_at' : str(self.used_at) }
 
 

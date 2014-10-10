@@ -91,7 +91,7 @@ class Item(models.Model):
 
   
 class Ticket(models.Model):
-  used_at = models.DateTimeField(null=True)
+  used_at = models.DateTimeField(null=True, blank=True)
   owner = models.ForeignKey('User')
   item = models.ForeignKey('Item', null=True)
   
